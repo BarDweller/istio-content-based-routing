@@ -33,6 +33,8 @@ Bring up a cluster with istio.. and deploy (via `kubectl apply -f <filename>`)
   - a simple container that echoes http headers back to the requestor, deploys to namespace `test1`
 - `headers-test2.yaml` 
   - a different simple container that also echoes headers back (with slightly different output). Deploys to namespace `test2`
+- `cookiesetter/cookiesetter.yaml`
+  - a very small rest endpoint that sets a `Istio-NS-Hint` cookie with the value from the url path, eg visiting `/cookie/test` will set the cookie with the value `test1`. See code in the `cookiesetter` folder for more info, Dockerfile provided.
 - `istio-envoy-filter-jwt-lua.yaml` a simple lua filter that base64 decodes the jwt, decodes the json, then sets headers based on the claims.
 - `hello-istio-gateway.yaml` 
   - an istio gateway & virtual service that maps `/cookie/<cookie-value>` to a cookiesetting application, and all other requests are tested for; 
