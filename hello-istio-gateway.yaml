@@ -1,0 +1,56 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: hello-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: hello
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - hello-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/cookie"
+    route:
+    - destination:
+        host: cookiesetter.cookiesetter.svc.cluster.local
+        port:
+          number: 8080  
+  - match:
+    - headers:
+        jwtheadername-name:
+          exact: "John Doe"
+    route:
+    - destination:
+        host: hello.test1.svc.cluster.local
+        port:
+          number: 8080  
+  - match:
+    - headers:
+        cookie:
+          regex: (^|.*; )Istio-NS-Hint=test1($|; .*)
+    route:
+    - destination:
+        host: hello.test1.svc.cluster.local
+        port:
+          number: 8080
+  - route:
+    - destination:
+        host: hello.test2.svc.cluster.local
+        port:
+          number: 8080
