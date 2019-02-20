@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cookiesetter
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cookiesetter
+  namespace: cookiesetter
+  labels:
+    app: cookiesetter
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: cookiesetter
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cookiesetter
+  namespace: cookiesetter
+  labels:
+    app: cookiesetter
+  annotations:
+    readiness.status.sidecar.istio.io/applicationPorts: ""
+spec:
+  selector:
+    matchLabels:
+      app: cookiesetter
+      tier: web
+  template:
+    metadata:
+      labels:
+        app: cookiesetter
+        tier: web
+    spec:
+      containers:
+      - name: cookiesetter
+        image: cookiesetter:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
