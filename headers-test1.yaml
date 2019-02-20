@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test1
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+  namespace: test1
+  labels:
+    app: hello
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: hello
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloweb
+  namespace: test1
+  labels:
+    app: hello
+  annotations:
+    readiness.status.sidecar.istio.io/applicationPorts: ""
+spec:
+  selector:
+    matchLabels:
+      app: hello
+      tier: web
+  template:
+    metadata:
+      labels:
+        app: hello
+        tier: web
+    spec:
+      containers:
+      - name: htest
+        image: brndnmtthws/nginx-echo-headers
+        ports:
+        - containerPort: 8080
