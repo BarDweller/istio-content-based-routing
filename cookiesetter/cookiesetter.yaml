@@ -42,7 +42,6 @@ spec:
     spec:
       containers:
       - name: cookiesetter
-        image: cookiesetter:latest
-        imagePullPolicy: Never
+        image: bardweller/cookiesetter:1.0
         ports:
         - containerPort: 8080
