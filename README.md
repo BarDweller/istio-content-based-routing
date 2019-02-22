@@ -2,11 +2,14 @@
 Demonstrating how to use Istio to route to applications in different namespaces using Cookies or JWT Claims.
 
 ## Overview
-Sometimes it can be handy to deploy multiple versions of an app concurrently, and have the version accessed be determined based on the request content.
 
-Istio allows content based routing, and is able to perform that based upon http headers (among other factors), but not JWT claims, nor cookies specifically. Thankfully JWTs and Cookies are both http headers, so there's a way to make this work. 
+Istio allows content based routing, which enables you to determine the destination for a request, from aspects of the request itself. 
+
+Sometimes it can be handy to deploy multiple versions of an app concurrently, and have the version accessed be determined based on the request content. For example, if you had two versions of the "Hello" app deployed at the same time in the namespaces "Test1" and "Test2", you can supply Istio with "Routing Configuration" to configure which instance requests from a user are forwarded to.
 
 ![Overview diagram showing example](diagram.png?raw=true "Overview of example deployment")
+
+Istio is able to perform that based upon http headers (among other factors), but not JWT claims, nor cookies specifically. Thankfully JWTs and Cookies are both http headers, so there's a way to make this work. 
 
 ## Cookie
 Istio can route based on Cookies relatively easily, although we have to use a regular expression to extract the cookie name & value from the overall cookie header. Here's the one used in the example, looking for a cookie called `Istio-NS-Hint` with a value of `test1`
