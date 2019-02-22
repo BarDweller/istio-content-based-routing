@@ -6,6 +6,8 @@ Sometimes it can be handy to deploy multiple versions of an app concurrently, an
 
 Istio allows content based routing, and is able to perform that based upon http headers (among other factors), but not JWT claims, nor cookies specifically. Thankfully JWTs and Cookies are both http headers, so there's a way to make this work. 
 
+![Overview diagram showing example](diagram.png?raw=true "Overview of example deployment")
+
 ## Cookie
 Istio can route based on Cookies relatively easily, although we have to use a regular expression to extract the cookie name & value from the overall cookie header. Here's the one used in the example, looking for a cookie called `Istio-NS-Hint` with a value of `test1`
 
